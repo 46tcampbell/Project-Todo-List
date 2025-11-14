@@ -33,6 +33,7 @@ projectList.addProject(project);
 projectList.addProject(project2);
 projectList.addProject(project3);
 console.log(projectList);
+console.log(projectList.getProjectListArray());
 const domStuff = new DOMStuff();
 // domStuff.showAllProjects(projectList.projectListArray);
 

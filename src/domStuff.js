@@ -21,14 +21,43 @@ class DOMStuff {
   showAllProjects() {
     this.contentDiv.textContent = '';
     const allProjectsDiv = document.createElement('div');
+    const allProjectsH2 = document.createElement('h2');
+    allProjectsH2.textContent = projectList.title;
+    allProjectsDiv.appendChild(allProjectsH2);
     const allProjectsUl = document.createElement('ul');
     projectList.getProjectListArray().forEach((project) => {
       const projectLi = document.createElement('li');
-      projectLi.textContent = project.title;
+      const projectLiBtn = document.createElement('button');
+      projectLiBtn.textContent = project.title;
+      projectLiBtn.addEventListener('click', () => {
+        this.showAllProjectTasks(project.todoListArray, project.title);
+      });
+      projectLi.appendChild(projectLiBtn);
       allProjectsUl.appendChild(projectLi);
     });
     allProjectsDiv.appendChild(allProjectsUl);
     this.contentDiv.appendChild(allProjectsDiv);
+  }
+
+  showAllProjectTasks(projectTodoListArray, projectTitle) {
+    this.contentDiv.textContent = '';
+    const allTodosDiv = document.createElement('div');
+    const allTodosH2 = document.createElement('h2');
+    allTodosH2.textContent = projectTitle;
+    allTodosDiv.appendChild(allTodosH2);
+    const allTodosUl = document.createElement('ul');
+    projectTodoListArray.forEach((todo) => {
+      const todoLi = document.createElement('li');
+      const todoTitleDiv = document.createElement('div');
+      const todoDescriptionDiv = document.createElement('div');
+      todoTitleDiv.textContent = todo.title;
+      todoDescriptionDiv.textContent = todo.description;
+      todoLi.appendChild(todoTitleDiv);
+      todoLi.appendChild(todoDescriptionDiv);
+      allTodosUl.appendChild(todoLi);
+    });
+    allTodosDiv.appendChild(allTodosUl);
+    this.contentDiv.appendChild(allTodosDiv);
   }
 }
 
