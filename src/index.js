@@ -31,3 +31,7 @@ project.removeTodo(todo);
 console.log(projectList);
 projectList.removeProject(project);
 console.log(projectList);
+todo.toggleIsCompleted();
+console.log(todo);
+todo.updatePriority('p4');
+console.log(todo);
