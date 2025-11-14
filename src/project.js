@@ -8,6 +8,11 @@ class Project {
   addTodo(todoObject) {
     this.todoListArray.push(todoObject);
   }
+
+  removeTodo(todoObject) {
+    const newArray = this.todoListArray.filter((obj) => obj !== todoObject);
+    this.todoListArray = newArray;
+  }
 }
 
 export { Project };
