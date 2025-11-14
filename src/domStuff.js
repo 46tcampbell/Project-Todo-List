@@ -9,6 +9,8 @@ class DOMStuff {
     this.allProjectsBtn = document.querySelector('#all-projects');
     this.addTaskBtn = document.querySelector('#add-task');
     this.contentDiv = document.querySelector('#content');
+    this.addTaskModal = document.querySelector('#add-task-modal');
+    this.projectModalSelect = document.querySelector('#project');
   }
 
   bindEvents() {
@@ -52,12 +54,25 @@ class DOMStuff {
       const todoDescriptionDiv = document.createElement('div');
       todoTitleDiv.textContent = todo.title;
       todoDescriptionDiv.textContent = todo.description;
+      //   likely need to add an event listener to this li in the
+      // future to make it easy to click and open the modal for
+      // editing the task.
       todoLi.appendChild(todoTitleDiv);
       todoLi.appendChild(todoDescriptionDiv);
       allTodosUl.appendChild(todoLi);
     });
     allTodosDiv.appendChild(allTodosUl);
     this.contentDiv.appendChild(allTodosDiv);
+  }
+
+  showAddTaskModal() {
+    this.addTaskModal.showModal();
+    projectList.getProjectListArray().forEach((project) => {
+      const option = document.createElement('option');
+      option.value = project.title;
+      option.textContent = project.title;
+      this.projectModalSelect.appendChild(option);
+    });
   }
 }
 

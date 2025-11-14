@@ -35,6 +35,7 @@ projectList.addProject(project3);
 console.log(projectList);
 console.log(projectList.getProjectListArray());
 const domStuff = new DOMStuff();
+domStuff.showAddTaskModal();
 // domStuff.showAllProjects(projectList.projectListArray);
 
 // project.removeTodo(todo);
