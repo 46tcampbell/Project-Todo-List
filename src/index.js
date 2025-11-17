@@ -1,7 +1,6 @@
 import './styles.css';
 import { TodoItem } from './todoItem';
 import { Project } from './project';
-import { projectList } from './allProjectsList';
 import { DOMStuff } from './domStuff';
 
 const todo = new TodoItem(
@@ -16,26 +15,26 @@ const todo2 = new TodoItem(
   '1/24/25',
   'p2'
 );
-console.log(todo);
-console.log(todo2);
-const project = new Project('Single Project', 'This is a single Project');
-const project2 = new Project('Single Project - 2', 'This is a single Project');
-const project3 = new Project('Single Project - 3', 'This is a single Project');
-console.log(project);
-project.addTodo(todo);
-console.log(project);
-project.addTodo(todo2);
-console.log(project);
+// console.log(todo);
+// console.log(todo2);
+const default1 = new Project('Default', 'This is a single Project');
+// const project2 = new Project('Single Project - 2', 'This is a single Project');
+// const project3 = new Project('Single Project - 3', 'This is a single Project');
+// console.log(default1);
+default1.addTodo(todo);
+// console.log(default1);
+default1.addTodo(todo2);
+// console.log(default1);
 // const projectList = new ProjectList();
 
-console.log(projectList);
-projectList.addProject(project);
-projectList.addProject(project2);
-projectList.addProject(project3);
-console.log(projectList);
-console.log(projectList.getProjectListArray());
+// console.log(projectList);
+// projectList.addProject(default1);
+// projectList.addProject(project2);
+// projectList.addProject(project3);
+// console.log(projectList);
+// console.log(projectList.getProjectListArray());
 const domStuff = new DOMStuff();
-domStuff.showAddTaskModal();
+// domStuff.showAddTaskModal();
 // domStuff.showAllProjects(projectList.projectListArray);
 
 // project.removeTodo(todo);

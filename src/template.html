@@ -10,26 +10,29 @@
       <nav>
         <button id="all-projects">All Projects</button>
         <button id="add-task">Add Task</button>
+        <button id="add-project">Add Project</button>
       </nav>
     </header>
+
     <dialog id="add-task-modal">
       <form method="dialog">
+        <h2>Add New Task</h2>
         <div class="form-group">
-          <label for="title">Title:</label>
+          <label for="todoTitle">Title:</label>
           <input
             type="text"
-            id="title"
-            name="title"
+            id="todoTitle"
+            name="todoTitle"
             placeholder="Make dat sweet, sweet cash"
             required
           />
         </div>
         <div class="form-group">
-          <label for="description">Description:</label>
+          <label for="todoDescription">Description:</label>
           <input
             type="text"
-            id="description"
-            name="description"
+            id="todoDescription"
+            name="todoDescription"
             placeholder="Like every single day"
             required
           />
@@ -60,21 +63,50 @@
           </ul>
         </fieldset>
         <div class="form-group">
-          <label for="project">Project:</label>
-          <select name="project" id="project">
-            <option value="">--Please choose an option--</option>
-          </select>
+          <label for="todoProject">Project:</label>
+          <select name="todoProject" id="todoProject"></select>
+        </div>
+        <div class="modal-buttons">
+          <button id="todo-close-modal-btn">Cancel</button>
+          <button id="todo-submit-modal-btn">Submit</button>
         </div>
       </form>
     </dialog>
+
+    <dialog id="add-project-modal">
+      <form method="dialog">
+        <h2>Add New Project</h2>
+        <div class="form-group">
+          <label for="projectTitle">Title:</label>
+          <input
+            type="text"
+            id="projectTitle"
+            name="projectTitle"
+            placeholder="Make dat sweet, sweet cash"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="projectDescription">Description:</label>
+          <input
+            type="text"
+            id="projectDescription"
+            name="projectDescription"
+            placeholder="Like every single day"
+            required
+          />
+        </div>
+        <div class="modal-buttons">
+          <button id="project-close-modal-btn">Cancel</button>
+          <button id="project-submit-modal-btn">Submit</button>
+        </div>
+      </form>
+    </dialog>
+
     <div id="content"></div>
   </body>
 </html>
 
 <!-- this.title = title;
     this.description = description;
-    this.dueDate = dueDate;
-    this.priority = priority;
-    this.project = project;
-    this.isCompleted = false;
-    this.id = crypto.randomUUID(); -->
+    this.todoListArray = []; -->

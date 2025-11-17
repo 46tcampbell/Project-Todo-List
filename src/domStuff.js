@@ -1,4 +1,5 @@
-import { projectList } from './allProjectsList';
+import { TodoItem } from './todoItem';
+import { Project } from './project';
 
 class DOMStuff {
   constructor() {
@@ -10,7 +11,13 @@ class DOMStuff {
     this.addTaskBtn = document.querySelector('#add-task');
     this.contentDiv = document.querySelector('#content');
     this.addTaskModal = document.querySelector('#add-task-modal');
-    this.projectModalSelect = document.querySelector('#project');
+    this.projectModalSelect = document.querySelector('#todoProject');
+    this.todoSubmitModalBtn = document.querySelector('#todo-submit-modal-btn');
+    this.addProjectBtn = document.querySelector('#add-project');
+    this.addProjectModal = document.querySelector('#add-project-modal');
+    this.projectSubmitModalBtn = document.querySelector(
+      '#project-submit-modal-btn'
+    );
   }
 
   bindEvents() {
@@ -18,16 +25,29 @@ class DOMStuff {
       'click',
       this.showAllProjects.bind(this)
     );
+    this.addTaskBtn.addEventListener('click', this.showAddTaskModal.bind(this));
+    this.todoSubmitModalBtn.addEventListener(
+      'click',
+      this.submitAddTaskModal.bind(this)
+    );
+    this.addProjectBtn.addEventListener(
+      'click',
+      this.showAddProjectModal.bind(this)
+    );
+    this.projectSubmitModalBtn.addEventListener(
+      'click',
+      this.submitAddProjectModal.bind(this)
+    );
   }
 
   showAllProjects() {
     this.contentDiv.textContent = '';
     const allProjectsDiv = document.createElement('div');
     const allProjectsH2 = document.createElement('h2');
-    allProjectsH2.textContent = projectList.title;
+    allProjectsH2.textContent = Project.getAllProjectsTitle();
     allProjectsDiv.appendChild(allProjectsH2);
     const allProjectsUl = document.createElement('ul');
-    projectList.getProjectListArray().forEach((project) => {
+    Project.getProjectListArray().forEach((project) => {
       const projectLi = document.createElement('li');
       const projectLiBtn = document.createElement('button');
       projectLiBtn.textContent = project.title;
@@ -67,12 +87,75 @@ class DOMStuff {
 
   showAddTaskModal() {
     this.addTaskModal.showModal();
-    projectList.getProjectListArray().forEach((project) => {
+    this.projectModalSelect.options.length = 0;
+    Project.getProjectListArray().forEach((project) => {
       const option = document.createElement('option');
-      option.value = project.title;
+      option.value = project.id;
       option.textContent = project.title;
       this.projectModalSelect.appendChild(option);
     });
+  }
+
+  submitAddTaskModal(e) {
+    e.preventDefault();
+    const todoTitle = document.querySelector('#todoTitle');
+    const todoDescription = document.querySelector('#todoDescription');
+    const todoDueDate = document.querySelector('#dueDate');
+    const todoPriority = document.querySelector(
+      'input[name="priority"]:checked'
+    );
+    const todoProject = document.querySelector('#todoProject');
+    const title = todoTitle.value;
+    const description = todoDescription.value;
+    const dueDate = todoDueDate.value;
+    const priority = todoPriority.value;
+    const project = todoProject.value;
+    const newTodo = new TodoItem(
+      title,
+      description,
+      dueDate,
+      priority,
+      project
+    );
+    const selectedProject = Project.findById(project);
+    console.log(newTodo);
+    console.log(newTodo.project);
+    console.log(selectedProject);
+    selectedProject.addTodo(newTodo);
+    console.log(selectedProject);
+    todoTitle.value = '';
+    todoDescription.value = '';
+    todoDueDate.value = '';
+    todoPriority.value = '';
+    todoProject.value = '';
+    this.addTaskModal.close();
+    // project.todoListArray.push(newTodo);
+    // projectList.getProjectListArray()
+    // this.myLibrary.push(newBook);
+    // bookTitle.value = '';
+    // bookAuthor.value = '';
+    // bookPages.value = '';
+    // // bookRead.value = '';
+    // this.addBookToTable();
+    // this.dialog.close();
+  }
+
+  showAddProjectModal() {
+    this.addProjectModal.showModal();
+  }
+
+  submitAddProjectModal(e) {
+    e.preventDefault();
+    const projectTitle = document.querySelector('#projectTitle');
+    const projectDescription = document.querySelector('#projectDescription');
+    const title = projectTitle.value;
+    const description = projectDescription.value;
+    const newProject = new Project(title, description);
+    console.log(newProject);
+    console.log(Project.getProjectListArray());
+    projectTitle.value = '';
+    projectDescription.value = '';
+    this.addProjectModal.close();
   }
 }
 
