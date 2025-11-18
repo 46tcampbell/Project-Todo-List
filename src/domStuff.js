@@ -83,17 +83,28 @@ class DOMStuff {
       todoLi.classList.add('todoLi');
       const todoTitleDiv = document.createElement('div');
       const todoDueDateDiv = document.createElement('div');
+      const todoButtonDiv = document.createElement('div');
+      const todoEditBtn = document.createElement('button');
+      const todoDeleteBtn = document.createElement('button');
       todoTitleDiv.textContent = todo.title;
       todoDueDateDiv.textContent = todo.dueDate;
+      todoEditBtn.textContent = 'See Details/Edit Todo';
+      todoDeleteBtn.textContent = 'Delete Todo';
       const todoProjectId = todo.project;
       //   likely need to add an event listener to this li in the
       // future to make it easy to click and open the modal for
       // editing the todo.
-      todoLi.addEventListener('click', () => {
+      todoEditBtn.addEventListener('click', () => {
         this.showEditTodoModal(todo, todoProjectId);
       });
+      todoDeleteBtn.addEventListener('click', () => {
+        this.deleteTodo(todo, todoProjectId);
+      });
+      todoButtonDiv.appendChild(todoEditBtn);
+      todoButtonDiv.appendChild(todoDeleteBtn);
       todoLi.appendChild(todoTitleDiv);
       todoLi.appendChild(todoDueDateDiv);
+      todoLi.appendChild(todoButtonDiv);
       allTodosUl.appendChild(todoLi);
     });
     allTodosDiv.appendChild(allTodosUl);
@@ -195,6 +206,10 @@ class DOMStuff {
     this.todoId.value = '';
     this.todoProjectId.value = '';
     this.addTodoModal.close();
+    this.showAllProjectTodos(
+      selectedProject.todoListArray,
+      selectedProject.title
+    );
   }
 
   showAddProjectModal() {
@@ -213,7 +228,9 @@ class DOMStuff {
     projectTitle.value = '';
     projectDescription.value = '';
     this.addProjectModal.close();
+    this.showAllProjects();
   }
+
   showTodoModalProjectSelectOptions() {
     this.projectModalSelect.options.length = 0;
     Project.getProjectListArray().forEach((project) => {
@@ -222,6 +239,15 @@ class DOMStuff {
       option.textContent = project.title;
       this.projectModalSelect.appendChild(option);
     });
+  }
+
+  deleteTodo(todo, todoProjectId) {
+    const projectToRemoveTodo = Project.findById(todoProjectId);
+    projectToRemoveTodo.removeTodo(todo);
+    this.showAllProjectTodos(
+      projectToRemoveTodo.todoListArray,
+      projectToRemoveTodo.title
+    );
   }
 }
 
