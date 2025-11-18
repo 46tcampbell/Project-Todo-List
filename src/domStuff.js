@@ -25,6 +25,8 @@ class DOMStuff {
       'input[name="priority"]:checked'
     );
     this.todoProject = document.querySelector('#todoProject');
+    this.todoId = document.querySelector('#todoId');
+    this.todoProjectId = document.querySelector('#todoProjectId');
     this.dialogH2 = document.querySelector('#dialog-h2');
   }
 
@@ -83,12 +85,12 @@ class DOMStuff {
       const todoDueDateDiv = document.createElement('div');
       todoTitleDiv.textContent = todo.title;
       todoDueDateDiv.textContent = todo.dueDate;
-      const todoProjectName = todo.project;
+      const todoProjectId = todo.project;
       //   likely need to add an event listener to this li in the
       // future to make it easy to click and open the modal for
       // editing the todo.
       todoLi.addEventListener('click', () => {
-        this.showEditTodoModal(todo, todoProjectName);
+        this.showEditTodoModal(todo, todoProjectId);
       });
       todoLi.appendChild(todoTitleDiv);
       todoLi.appendChild(todoDueDateDiv);
@@ -98,8 +100,8 @@ class DOMStuff {
     this.contentDiv.appendChild(allTodosDiv);
   }
 
-  showEditTodoModal(todo, todoProjectName) {
-    console.log(todo);
+  showEditTodoModal(todo, todoProjectId) {
+    // console.log(todo);
     this.addTodoModal.showModal();
     this.showTodoModalProjectSelectOptions();
     this.dialogH2.textContent = 'Edit Todo';
@@ -107,17 +109,25 @@ class DOMStuff {
     this.todoDescription.value = todo.description;
     this.todoDueDate.value = todo.dueDate;
     this.todoPriority.value = todo.priority;
+    this.todoId.value = todo.id;
+    this.todoProjectId.value = todoProjectId;
 
-    const selectedProject = Project.findByName(todoProjectName);
+    const selectedProject = Project.findById(todoProjectId);
+    console.log(selectedProject);
+    console.log(this.projectModalSelect);
+
     const todoOptionToSelect = this.projectModalSelect.querySelector(
       `option[value='${selectedProject.id}']`
     );
-    console.log(selectedProject);
-    console.log(this.projectModalSelect.options);
-    console.log(todoOptionToSelect);
+
+    // console.log(selectedProject);
+    // console.log(this.projectModalSelect.options);
+    // console.log(todoOptionToSelect);
+
     if (todoOptionToSelect) {
       todoOptionToSelect.selected = true;
     }
+
     // this.todoProject.value = todo.project;
     // 11/17/25: Left off here today and am getting stuck at populating the
     // current project in the edit modal. Just need to review what I'm doing
@@ -142,25 +152,48 @@ class DOMStuff {
     const dueDate = this.todoDueDate.value;
     const priority = this.todoPriority.value;
     const project = this.todoProject.value;
-    const newTodo = new TodoItem(
-      title,
-      description,
-      dueDate,
-      priority,
-      project
-    );
     const selectedProject = Project.findById(project);
-    // console.log(newTodo);
-    // console.log(newTodo.project);
+    const previousProject = Project.findById(this.todoProjectId.value);
+    console.log(selectedProject);
+    if (this.todoId.value) {
+      console.log(this.todoId.value);
+      previousProject.updateTodo(
+        this.todoId.value,
+        title,
+        description,
+        dueDate,
+        priority
+      );
+      if (this.todoProjectId.value !== selectedProject.id) {
+        const projectToRemoveTodo = Project.findById(this.todoProjectId.value);
+        console.log(projectToRemoveTodo);
+        projectToRemoveTodo.moveTodo(this.todoId.value, selectedProject);
+        console.log(projectToRemoveTodo);
+        console.log(selectedProject);
+        // After break, review this section and make sure to update the task project
+      }
+    } else {
+      const newTodo = new TodoItem(
+        title,
+        description,
+        dueDate,
+        priority,
+        project
+      );
+      // console.log(newTodo);
+      // console.log(newTodo.project);
+      // console.log(selectedProject);
+      selectedProject.addTodo(newTodo);
+    }
     // console.log(selectedProject);
-    selectedProject.addTodo(newTodo);
-    // console.log(selectedProject);
-    console.log(dueDate);
+    // console.log(dueDate);
     this.todoTitle.value = '';
     this.todoDescription.value = '';
     this.todoDueDate.value = '';
     this.todoPriority.value = '';
     this.todoProject.value = '';
+    this.todoId.value = '';
+    this.todoProjectId.value = '';
     this.addTodoModal.close();
   }
 
@@ -175,8 +208,8 @@ class DOMStuff {
     const title = projectTitle.value;
     const description = projectDescription.value;
     const newProject = new Project(title, description);
-    console.log(newProject);
-    console.log(Project.getProjectListArray());
+    // console.log(newProject);
+    // console.log(Project.getProjectListArray());
     projectTitle.value = '';
     projectDescription.value = '';
     this.addProjectModal.close();

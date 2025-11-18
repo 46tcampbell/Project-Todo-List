@@ -41,6 +41,31 @@ class Project {
     const newArray = this.todoListArray.filter((obj) => obj !== todoObject);
     this.todoListArray = newArray;
   }
+
+  moveTodo(todo, newProjectArray) {
+    const todoToMoveIndex = this.todoListArray.findIndex(
+      (currProjectTodo) => currProjectTodo.id === todo
+    );
+    const todoToMove = this.todoListArray.splice(todoToMoveIndex, 1);
+    console.log(todoToMove[0]);
+    todoToMove[0].project = newProjectArray.id;
+    newProjectArray.todoListArray.push(todoToMove[0]);
+    // const newArray = this.todoListArray.filter((obj) => obj !== todoObject);
+    // this.todoListArray = newArray;
+  }
+
+  updateTodo(todoId, title, description, dueDate, priority) {
+    const todoToEdit = this.findById(todoId);
+    console.log(todoToEdit);
+    todoToEdit.title = title;
+    todoToEdit.description = description;
+    todoToEdit.dueDate = dueDate;
+    todoToEdit.priority = priority;
+  }
+
+  findById(id) {
+    return this.todoListArray.find((instance) => instance.id === id);
+  }
 }
 
 export { Project };
