@@ -1,5 +1,6 @@
 import { TodoItem } from './todoItem';
 import { Project } from './project';
+import { format, formatDistanceToNow } from 'date-fns';
 
 class DOMStuff {
   constructor() {
@@ -87,7 +88,9 @@ class DOMStuff {
       const todoEditBtn = document.createElement('button');
       const todoDeleteBtn = document.createElement('button');
       todoTitleDiv.textContent = todo.title;
-      todoDueDateDiv.textContent = todo.dueDate;
+      const formattedDate = format(todo.dueDate, 'PPPP');
+      const distanceToDueDate = formatDistanceToNow(todo.dueDate);
+      todoDueDateDiv.textContent = `${formattedDate} (Due in ${distanceToDueDate})`;
       todoEditBtn.textContent = 'See Details/Edit Todo';
       todoDeleteBtn.textContent = 'Delete Todo';
       const todoProjectId = todo.project;
