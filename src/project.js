@@ -14,6 +14,12 @@ class Project {
     return Project.#projectListArray.find((instance) => instance.id === id);
   }
 
+  static findByName(title) {
+    return Project.#projectListArray.find(
+      (instance) => instance.title === title
+    );
+  }
+
   static getProjectListArray() {
     return Project.#projectListArray;
   }

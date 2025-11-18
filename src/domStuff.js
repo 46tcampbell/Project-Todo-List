@@ -8,9 +8,9 @@ class DOMStuff {
   }
   cacheDom() {
     this.allProjectsBtn = document.querySelector('#all-projects');
-    this.addTaskBtn = document.querySelector('#add-task');
+    this.addTodoBtn = document.querySelector('#add-todo');
     this.contentDiv = document.querySelector('#content');
-    this.addTaskModal = document.querySelector('#add-task-modal');
+    this.addTodoModal = document.querySelector('#add-todo-modal');
     this.projectModalSelect = document.querySelector('#todoProject');
     this.todoSubmitModalBtn = document.querySelector('#todo-submit-modal-btn');
     this.addProjectBtn = document.querySelector('#add-project');
@@ -18,6 +18,14 @@ class DOMStuff {
     this.projectSubmitModalBtn = document.querySelector(
       '#project-submit-modal-btn'
     );
+    this.todoTitle = document.querySelector('#todoTitle');
+    this.todoDescription = document.querySelector('#todoDescription');
+    this.todoDueDate = document.querySelector('#dueDate');
+    this.todoPriority = document.querySelector(
+      'input[name="priority"]:checked'
+    );
+    this.todoProject = document.querySelector('#todoProject');
+    this.dialogH2 = document.querySelector('#dialog-h2');
   }
 
   bindEvents() {
@@ -25,10 +33,10 @@ class DOMStuff {
       'click',
       this.showAllProjects.bind(this)
     );
-    this.addTaskBtn.addEventListener('click', this.showAddTaskModal.bind(this));
+    this.addTodoBtn.addEventListener('click', this.showAddTodoModal.bind(this));
     this.todoSubmitModalBtn.addEventListener(
       'click',
-      this.submitAddTaskModal.bind(this)
+      this.submitAddTodoModal.bind(this)
     );
     this.addProjectBtn.addEventListener(
       'click',
@@ -52,7 +60,7 @@ class DOMStuff {
       const projectLiBtn = document.createElement('button');
       projectLiBtn.textContent = project.title;
       projectLiBtn.addEventListener('click', () => {
-        this.showAllProjectTasks(project.todoListArray, project.title);
+        this.showAllProjectTodos(project.todoListArray, project.title);
       });
       projectLi.appendChild(projectLiBtn);
       allProjectsUl.appendChild(projectLi);
@@ -61,55 +69,79 @@ class DOMStuff {
     this.contentDiv.appendChild(allProjectsDiv);
   }
 
-  showAllProjectTasks(projectTodoListArray, projectTitle) {
+  showAllProjectTodos(projectTodoListArray, projectTitle) {
     this.contentDiv.textContent = '';
     const allTodosDiv = document.createElement('div');
     const allTodosH2 = document.createElement('h2');
-    allTodosH2.textContent = projectTitle;
+    allTodosH2.textContent = `${projectTitle} - All Todos`;
     allTodosDiv.appendChild(allTodosH2);
     const allTodosUl = document.createElement('ul');
     projectTodoListArray.forEach((todo) => {
       const todoLi = document.createElement('li');
+      todoLi.classList.add('todoLi');
       const todoTitleDiv = document.createElement('div');
-      const todoDescriptionDiv = document.createElement('div');
+      const todoDueDateDiv = document.createElement('div');
       todoTitleDiv.textContent = todo.title;
-      todoDescriptionDiv.textContent = todo.description;
+      todoDueDateDiv.textContent = todo.dueDate;
+      const todoProjectName = todo.project;
       //   likely need to add an event listener to this li in the
       // future to make it easy to click and open the modal for
-      // editing the task.
+      // editing the todo.
+      todoLi.addEventListener('click', () => {
+        this.showEditTodoModal(todo, todoProjectName);
+      });
       todoLi.appendChild(todoTitleDiv);
-      todoLi.appendChild(todoDescriptionDiv);
+      todoLi.appendChild(todoDueDateDiv);
       allTodosUl.appendChild(todoLi);
     });
     allTodosDiv.appendChild(allTodosUl);
     this.contentDiv.appendChild(allTodosDiv);
   }
 
-  showAddTaskModal() {
-    this.addTaskModal.showModal();
-    this.projectModalSelect.options.length = 0;
-    Project.getProjectListArray().forEach((project) => {
-      const option = document.createElement('option');
-      option.value = project.id;
-      option.textContent = project.title;
-      this.projectModalSelect.appendChild(option);
-    });
+  showEditTodoModal(todo, todoProjectName) {
+    console.log(todo);
+    this.addTodoModal.showModal();
+    this.showTodoModalProjectSelectOptions();
+    this.dialogH2.textContent = 'Edit Todo';
+    this.todoTitle.value = todo.title;
+    this.todoDescription.value = todo.description;
+    this.todoDueDate.value = todo.dueDate;
+    this.todoPriority.value = todo.priority;
+
+    const selectedProject = Project.findByName(todoProjectName);
+    const todoOptionToSelect = this.projectModalSelect.querySelector(
+      `option[value='${selectedProject.id}']`
+    );
+    console.log(selectedProject);
+    console.log(this.projectModalSelect.options);
+    console.log(todoOptionToSelect);
+    if (todoOptionToSelect) {
+      todoOptionToSelect.selected = true;
+    }
+    // this.todoProject.value = todo.project;
+    // 11/17/25: Left off here today and am getting stuck at populating the
+    // current project in the edit modal. Just need to review what I'm doing
   }
 
-  submitAddTaskModal(e) {
+  showAddTodoModal() {
+    this.addTodoModal.showModal();
+    this.dialogH2.textContent = 'Add New Todo';
+    // Project.getProjectListArray().forEach((project) => {
+    //   const option = document.createElement('option');
+    //   option.value = project.id;
+    //   option.textContent = project.title;
+    //   this.projectModalSelect.appendChild(option);
+    // });
+    this.showTodoModalProjectSelectOptions();
+  }
+
+  submitAddTodoModal(e) {
     e.preventDefault();
-    const todoTitle = document.querySelector('#todoTitle');
-    const todoDescription = document.querySelector('#todoDescription');
-    const todoDueDate = document.querySelector('#dueDate');
-    const todoPriority = document.querySelector(
-      'input[name="priority"]:checked'
-    );
-    const todoProject = document.querySelector('#todoProject');
-    const title = todoTitle.value;
-    const description = todoDescription.value;
-    const dueDate = todoDueDate.value;
-    const priority = todoPriority.value;
-    const project = todoProject.value;
+    const title = this.todoTitle.value;
+    const description = this.todoDescription.value;
+    const dueDate = this.todoDueDate.value;
+    const priority = this.todoPriority.value;
+    const project = this.todoProject.value;
     const newTodo = new TodoItem(
       title,
       description,
@@ -118,26 +150,18 @@ class DOMStuff {
       project
     );
     const selectedProject = Project.findById(project);
-    console.log(newTodo);
-    console.log(newTodo.project);
-    console.log(selectedProject);
+    // console.log(newTodo);
+    // console.log(newTodo.project);
+    // console.log(selectedProject);
     selectedProject.addTodo(newTodo);
-    console.log(selectedProject);
-    todoTitle.value = '';
-    todoDescription.value = '';
-    todoDueDate.value = '';
-    todoPriority.value = '';
-    todoProject.value = '';
-    this.addTaskModal.close();
-    // project.todoListArray.push(newTodo);
-    // projectList.getProjectListArray()
-    // this.myLibrary.push(newBook);
-    // bookTitle.value = '';
-    // bookAuthor.value = '';
-    // bookPages.value = '';
-    // // bookRead.value = '';
-    // this.addBookToTable();
-    // this.dialog.close();
+    // console.log(selectedProject);
+    console.log(dueDate);
+    this.todoTitle.value = '';
+    this.todoDescription.value = '';
+    this.todoDueDate.value = '';
+    this.todoPriority.value = '';
+    this.todoProject.value = '';
+    this.addTodoModal.close();
   }
 
   showAddProjectModal() {
@@ -156,6 +180,15 @@ class DOMStuff {
     projectTitle.value = '';
     projectDescription.value = '';
     this.addProjectModal.close();
+  }
+  showTodoModalProjectSelectOptions() {
+    this.projectModalSelect.options.length = 0;
+    Project.getProjectListArray().forEach((project) => {
+      const option = document.createElement('option');
+      option.value = project.id;
+      option.textContent = project.title;
+      this.projectModalSelect.appendChild(option);
+    });
   }
 }
 
