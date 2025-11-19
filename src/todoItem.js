@@ -16,10 +16,6 @@ class TodoItem {
     this.id = id;
   }
 
-  // static findById(id) {
-  //   return TodoItem.#projectListArray.find((instance) => instance.id === id);
-  // }
-
   toggleIsCompleted() {
     this.isCompleted = !this.isCompleted;
   }
@@ -35,9 +31,6 @@ class TodoItem {
     this.priority = priority;
     this.project = project;
   }
-  //   I think I should add some methods here like a toggle for
-  // isCompleted as well as a priority setter, but not sure yet
-  // so adding comment
 }
 
 export { TodoItem };

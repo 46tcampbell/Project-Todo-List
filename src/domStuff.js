@@ -6,6 +6,7 @@ class DOMStuff {
   constructor() {
     this.cacheDom();
     this.bindEvents();
+    this.initialPageLoad();
   }
   cacheDom() {
     this.allProjectsBtn = document.querySelector('#all-projects');
@@ -94,9 +95,6 @@ class DOMStuff {
       todoEditBtn.textContent = 'See Details/Edit Todo';
       todoDeleteBtn.textContent = 'Delete Todo';
       const todoProjectId = todo.project;
-      //   likely need to add an event listener to this li in the
-      // future to make it easy to click and open the modal for
-      // editing the todo.
       todoEditBtn.addEventListener('click', () => {
         this.showEditTodoModal(todo, todoProjectId);
       });
@@ -115,7 +113,6 @@ class DOMStuff {
   }
 
   showEditTodoModal(todo, todoProjectId) {
-    // console.log(todo);
     this.addTodoModal.showModal();
     this.showTodoModalProjectSelectOptions();
     this.dialogH2.textContent = 'Edit Todo';
@@ -134,28 +131,14 @@ class DOMStuff {
       `option[value='${selectedProject.id}']`
     );
 
-    // console.log(selectedProject);
-    // console.log(this.projectModalSelect.options);
-    // console.log(todoOptionToSelect);
-
     if (todoOptionToSelect) {
       todoOptionToSelect.selected = true;
     }
-
-    // this.todoProject.value = todo.project;
-    // 11/17/25: Left off here today and am getting stuck at populating the
-    // current project in the edit modal. Just need to review what I'm doing
   }
 
   showAddTodoModal() {
     this.addTodoModal.showModal();
     this.dialogH2.textContent = 'Add New Todo';
-    // Project.getProjectListArray().forEach((project) => {
-    //   const option = document.createElement('option');
-    //   option.value = project.id;
-    //   option.textContent = project.title;
-    //   this.projectModalSelect.appendChild(option);
-    // });
     this.showTodoModalProjectSelectOptions();
   }
 
@@ -180,11 +163,7 @@ class DOMStuff {
       );
       if (this.todoProjectId.value !== selectedProject.id) {
         const projectToRemoveTodo = Project.findById(this.todoProjectId.value);
-        console.log(projectToRemoveTodo);
         projectToRemoveTodo.moveTodo(this.todoId.value, selectedProject);
-        console.log(projectToRemoveTodo);
-        console.log(selectedProject);
-        // After break, review this section and make sure to update the task project
       }
     } else {
       const newTodo = new TodoItem(
@@ -194,13 +173,8 @@ class DOMStuff {
         priority,
         project
       );
-      // console.log(newTodo);
-      // console.log(newTodo.project);
-      // console.log(selectedProject);
       selectedProject.addTodo(newTodo);
     }
-    // console.log(selectedProject);
-    // console.log(dueDate);
     this.todoTitle.value = '';
     this.todoDescription.value = '';
     this.todoDueDate.value = '';
@@ -213,6 +187,7 @@ class DOMStuff {
       selectedProject.todoListArray,
       selectedProject.title
     );
+    Project.updateLocalStorage();
   }
 
   showAddProjectModal() {
@@ -226,12 +201,11 @@ class DOMStuff {
     const title = projectTitle.value;
     const description = projectDescription.value;
     const newProject = new Project(title, description);
-    // console.log(newProject);
-    // console.log(Project.getProjectListArray());
     projectTitle.value = '';
     projectDescription.value = '';
     this.addProjectModal.close();
     this.showAllProjects();
+    Project.updateLocalStorage();
   }
 
   showTodoModalProjectSelectOptions() {
@@ -251,6 +225,11 @@ class DOMStuff {
       projectToRemoveTodo.todoListArray,
       projectToRemoveTodo.title
     );
+    Project.updateLocalStorage();
+  }
+
+  initialPageLoad() {
+    Project.checkLocalStorage();
   }
 }
 

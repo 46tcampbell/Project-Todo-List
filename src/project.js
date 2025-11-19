@@ -2,11 +2,11 @@ class Project {
   static #allProjectsTitle = 'My Projects';
   static #projectListArray = [];
 
-  constructor(title, description) {
+  constructor(title, description, id, todoListArray) {
     this.title = title;
     this.description = description;
-    this.id = crypto.randomUUID();
-    this.todoListArray = [];
+    this.id = id || crypto.randomUUID();
+    this.todoListArray = todoListArray || [];
     Project.#projectListArray.push(this);
   }
 
@@ -24,6 +24,28 @@ class Project {
     return Project.#projectListArray;
   }
 
+  static setProjectListArray(storedProjectListArray) {
+    Project.#projectListArray = storedProjectListArray;
+  }
+
+  static checkLocalStorage() {
+    const storedSettings = localStorage.getItem('projectListArray');
+    if (storedSettings) {
+      const storedProjectListArray = JSON.parse(storedSettings);
+      console.log(storedProjectListArray);
+      storedProjectListArray.forEach((project) => {
+        const storedProject = new Project(
+          project.title,
+          project.description,
+          project.id,
+          project.todoListArray
+        );
+      });
+    } else {
+      const default1 = new Project('Default', 'This is a single Project');
+    }
+  }
+
   static getAllProjectsTitle() {
     return Project.#allProjectsTitle;
   }
@@ -31,6 +53,13 @@ class Project {
   static removeProject(projectArray) {
     const newArray = projectListArray.filter((array) => array !== projectArray);
     Project.#projectListArray = newArray;
+  }
+
+  static updateLocalStorage() {
+    localStorage.setItem(
+      'projectListArray',
+      JSON.stringify(Project.#projectListArray)
+    );
   }
 
   addTodo(todoObject) {
@@ -50,8 +79,6 @@ class Project {
     console.log(todoToMove[0]);
     todoToMove[0].project = newProjectArray.id;
     newProjectArray.todoListArray.push(todoToMove[0]);
-    // const newArray = this.todoListArray.filter((obj) => obj !== todoObject);
-    // this.todoListArray = newArray;
   }
 
   updateTodo(todoId, title, description, dueDate, priority) {
