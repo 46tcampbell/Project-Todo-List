@@ -69,6 +69,7 @@ class DOMStuff {
     const allProjectsDiv = document.createElement('div');
     const allProjectsH2 = document.createElement('h2');
     allProjectsH2.textContent = Project.getAllProjectsTitle();
+    allProjectsDiv.classList.add('all-projects-div');
     allProjectsDiv.appendChild(allProjectsH2);
     const allProjectsUl = document.createElement('ul');
     Project.getProjectListArray().forEach((project) => {
@@ -90,6 +91,7 @@ class DOMStuff {
     const allTodosDiv = document.createElement('div');
     const allTodosH2 = document.createElement('h2');
     allTodosH2.textContent = `${projectTitle} - All Todos`;
+    allTodosDiv.classList.add('all-project-todos-div');
     allTodosDiv.appendChild(allTodosH2);
     const allTodosUl = document.createElement('ul');
     projectTodoListArray.forEach((todo) => {
@@ -100,6 +102,7 @@ class DOMStuff {
       const todoButtonDiv = document.createElement('div');
       const todoEditBtn = document.createElement('button');
       const todoDeleteBtn = document.createElement('button');
+      todoButtonDiv.classList.add('todo-li-div');
       todoTitleDiv.textContent = todo.title;
       console.log(todo.dueDate);
       const formattedDate = format(todo.dueDate, 'PPPP');
