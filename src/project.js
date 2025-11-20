@@ -43,6 +43,7 @@ class Project {
       });
     } else {
       const default1 = new Project('Default', 'This is a single Project');
+      Project.updateLocalStorage();
     }
   }
 

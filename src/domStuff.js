@@ -15,10 +15,14 @@ class DOMStuff {
     this.addTodoModal = document.querySelector('#add-todo-modal');
     this.projectModalSelect = document.querySelector('#todoProject');
     this.todoSubmitModalBtn = document.querySelector('#todo-submit-modal-btn');
+    this.todoCloseModalBtn = document.querySelector('#todo-close-modal-btn');
     this.addProjectBtn = document.querySelector('#add-project');
     this.addProjectModal = document.querySelector('#add-project-modal');
     this.projectSubmitModalBtn = document.querySelector(
       '#project-submit-modal-btn'
+    );
+    this.projectCloseModalBtn = document.querySelector(
+      '#project-close-modal-btn'
     );
     this.todoTitle = document.querySelector('#todoTitle');
     this.todoDescription = document.querySelector('#todoDescription');
@@ -42,6 +46,10 @@ class DOMStuff {
       'click',
       this.submitAddTodoModal.bind(this)
     );
+    this.todoCloseModalBtn.addEventListener(
+      'click',
+      this.closeTodoModal.bind(this)
+    );
     this.addProjectBtn.addEventListener(
       'click',
       this.showAddProjectModal.bind(this)
@@ -49,6 +57,10 @@ class DOMStuff {
     this.projectSubmitModalBtn.addEventListener(
       'click',
       this.submitAddProjectModal.bind(this)
+    );
+    this.projectCloseModalBtn.addEventListener(
+      'click',
+      this.closeAddProjectModal.bind(this)
     );
   }
 
@@ -89,6 +101,7 @@ class DOMStuff {
       const todoEditBtn = document.createElement('button');
       const todoDeleteBtn = document.createElement('button');
       todoTitleDiv.textContent = todo.title;
+      console.log(todo.dueDate);
       const formattedDate = format(todo.dueDate, 'PPPP');
       const distanceToDueDate = formatDistanceToNow(todo.dueDate);
       todoDueDateDiv.textContent = `${formattedDate} (Due in ${distanceToDueDate})`;
@@ -188,6 +201,14 @@ class DOMStuff {
       selectedProject.title
     );
     Project.updateLocalStorage();
+  }
+
+  closeTodoModal() {
+    this.addTodoModal.close();
+  }
+
+  closeAddProjectModal() {
+    this.addProjectModal.close();
   }
 
   showAddProjectModal() {
