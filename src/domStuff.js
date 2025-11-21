@@ -107,6 +107,10 @@ class DOMStuff {
       todoLi.classList.add('todoLi');
       const todoTitleDiv = document.createElement('div');
       todoTitleDiv.classList.add('todo-title');
+      todoTitleDiv.addEventListener('click', () => {
+        todoTitleDiv.classList.toggle('strikethrough');
+        todoDueDateDiv.classList.toggle('strikethrough');
+      });
       const todoDueDateDiv = document.createElement('div');
       todoDueDateDiv.classList.add('todo-due-date');
       const todoButtonDiv = document.createElement('div');
@@ -312,8 +316,6 @@ class DOMStuff {
   initialPageLoad() {
     Project.checkLocalStorage();
   }
-
-  checkAddTodoValidity() {}
 }
 
 export { DOMStuff };
