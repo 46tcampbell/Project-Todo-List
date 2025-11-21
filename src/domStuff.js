@@ -100,7 +100,9 @@ class DOMStuff {
       const todoLi = document.createElement('li');
       todoLi.classList.add('todoLi');
       const todoTitleDiv = document.createElement('div');
+      todoTitleDiv.classList.add('todo-title');
       const todoDueDateDiv = document.createElement('div');
+      todoDueDateDiv.classList.add('todo-due-date');
       const todoButtonDiv = document.createElement('div');
       const todoEditBtn = document.createElement('button');
       const todoDeleteBtn = document.createElement('button');
