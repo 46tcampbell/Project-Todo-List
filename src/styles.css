@@ -65,12 +65,13 @@ h6 {
 :root {
   --main-bg-black: rgba(0, 0, 0, 0.596);
   --main-text-white: whitesmoke;
+  --main-text-black: black;
 }
 
 body {
   font-family: system-ui, sans-serif;
-  background: no-repeat center/100% url('./images/todo-list.jpg');
-  height: 100vh;
+  background: no-repeat center center fixed url('./images/todo-list.jpg');
+  background-size: cover;
 }
 
 header {
@@ -175,6 +176,10 @@ input {
 form {
   display: grid;
   gap: 1rem;
+}
+
+form input {
+  color: var(--main-text-black);
 }
 
 .form-group {

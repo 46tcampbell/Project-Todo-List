@@ -13,11 +13,13 @@ class DOMStuff {
     this.addTodoBtn = document.querySelector('#add-todo');
     this.contentDiv = document.querySelector('#content');
     this.addTodoModal = document.querySelector('#add-todo-modal');
+    this.addTodoForm = document.querySelector('#add-todo-form');
     this.projectModalSelect = document.querySelector('#todoProject');
     this.todoSubmitModalBtn = document.querySelector('#todo-submit-modal-btn');
     this.todoCloseModalBtn = document.querySelector('#todo-close-modal-btn');
     this.addProjectBtn = document.querySelector('#add-project');
     this.addProjectModal = document.querySelector('#add-project-modal');
+    this.addProjectForm = document.querySelector('#add-project-form');
     this.projectSubmitModalBtn = document.querySelector(
       '#project-submit-modal-btn'
     );
@@ -208,10 +210,12 @@ class DOMStuff {
 
   closeTodoModal() {
     this.addTodoModal.close();
+    this.addTodoForm.reset();
   }
 
   closeAddProjectModal() {
     this.addProjectModal.close();
+    this.addProjectForm.reset();
   }
 
   showAddProjectModal() {
