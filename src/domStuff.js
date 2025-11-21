@@ -36,6 +36,12 @@ class DOMStuff {
     this.todoId = document.querySelector('#todoId');
     this.todoProjectId = document.querySelector('#todoProjectId');
     this.dialogH2 = document.querySelector('#dialog-h2');
+    this.todoErrorContainer = document.querySelector('.todo-error-messages');
+    this.projectErrorContainer = document.querySelector(
+      '.project-error-messages'
+    );
+    this.projectTitle = document.querySelector('#projectTitle');
+    this.projectDescription = document.querySelector('#projectDescription');
   }
 
   bindEvents() {
@@ -164,6 +170,31 @@ class DOMStuff {
 
   submitAddTodoModal(e) {
     e.preventDefault();
+    let isValid = true;
+    const errorMessages = [];
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (this.todoTitle.value.trim() === '') {
+      isValid = false;
+      errorMessages.push('Title is required.');
+    }
+
+    if (this.todoDescription.value.trim() === '') {
+      isValid = false;
+      errorMessages.push('Description is required.');
+    }
+
+    if (!dateRegex.test(this.todoDueDate.value)) {
+      isValid = false;
+      errorMessages.push('Please choose a due date');
+    }
+
+    if (!isValid) {
+      this.todoErrorContainer.innerHTML = errorMessages.join('<br>');
+      this.todoErrorContainer.style.display = 'block';
+      this.todoErrorContainer.style.color = 'red';
+      return;
+    }
     const title = this.todoTitle.value;
     const description = this.todoDescription.value;
     const dueDate = this.todoDueDate.value;
@@ -202,6 +233,7 @@ class DOMStuff {
     this.todoProject.value = '';
     this.todoId.value = '';
     this.todoProjectId.value = '';
+    this.todoErrorContainer.innerHTML = '';
     this.addTodoModal.close();
     this.showAllProjectTodos(
       selectedProject.todoListArray,
@@ -213,11 +245,13 @@ class DOMStuff {
   closeTodoModal() {
     this.addTodoModal.close();
     this.addTodoForm.reset();
+    this.todoErrorContainer.innerHTML = '';
   }
 
   closeAddProjectModal() {
     this.addProjectModal.close();
     this.addProjectForm.reset();
+    this.projectErrorContainer.innerHTML = '';
   }
 
   showAddProjectModal() {
@@ -226,13 +260,30 @@ class DOMStuff {
 
   submitAddProjectModal(e) {
     e.preventDefault();
-    const projectTitle = document.querySelector('#projectTitle');
-    const projectDescription = document.querySelector('#projectDescription');
-    const title = projectTitle.value;
-    const description = projectDescription.value;
+    let isValid = true;
+    const errorMessages = [];
+
+    if (this.projectTitle.value.trim() === '') {
+      isValid = false;
+      errorMessages.push('Title is required.');
+    }
+
+    if (this.projectDescription.value.trim() === '') {
+      isValid = false;
+      errorMessages.push('Description is required.');
+    }
+
+    if (!isValid) {
+      this.projectErrorContainer.innerHTML = errorMessages.join('<br>');
+      this.projectErrorContainer.style.display = 'block';
+      this.projectErrorContainer.style.color = 'red';
+      return;
+    }
+    const title = this.projectTitle.value;
+    const description = this.projectDescription.value;
     const newProject = new Project(title, description);
-    projectTitle.value = '';
-    projectDescription.value = '';
+    this.projectTitle.value = '';
+    this.projectDescription.value = '';
     this.addProjectModal.close();
     this.showAllProjects();
     Project.updateLocalStorage();
@@ -261,6 +312,8 @@ class DOMStuff {
   initialPageLoad() {
     Project.checkLocalStorage();
   }
+
+  checkAddTodoValidity() {}
 }
 
 export { DOMStuff };
